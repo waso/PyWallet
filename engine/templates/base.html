@@ -1,15 +1,16 @@
-
+{% load my_custom_templates %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>PyWallet Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -24,10 +25,6 @@
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}ico/favicon.ico">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}ico/apple-touch-icon-57-precomposed.png">
   </head>
 
   <body>
@@ -55,14 +52,16 @@
 
       <div class="row-fluid">
         <div class="span8">
-          <form class="form-inline">
-            <input class="span2" id="amount" type="text" placeholder="0.00">
-            <select class="span2">
-              <option>EUR</option>
-              <option>PLN</option>
+          <form class="form-inline" method="POST" action="/">
+            {% csrf_token %}
+            <input class="span2" name="amount" id="amount" type="text" placeholder="0.00">
+            <select class="width70" id="currency" name="currency">
+              <option value="eur">EUR</option>
+              <option value="pln">PLN</option>
             </select>
-            <input class="input-small" id="date" type="text" value="14.10.2012">
-            <button class="btn btn-primary" type="button"><i class="icon-plus-sign icon-white"></i> </button>
+            <input class="span5" name="name" id="name" type="text" placeholder="Transaction name">
+            <input class="input-small" name="date" id="date" type="text" value="{{ date|date:"j-m-o" }}">
+            <button class="btn" type="submit">Add</button>
           </form>
 
           <table class="table table-hover">
@@ -75,18 +74,15 @@
                 </tr>
               </thead>
               <tbody>
+                {% for expense in expenses.all %}
                 <tr>
-                  <td>2</td>
-                  <td>14 10 2012</td>
-                  <td>Food</td>
-                  <td>12.50 EUR</td>
+                  <td class="span1">{{ expense.transaction_id }}</td>
+                  <td class="span2">{{ expense.date|date:"j-m-o" }}</td>
+                  <td class="span6">{{ expense.name }}</td>
+                  <td class="span2 currency">{{ expense.amount|format_price }} {{ expense.currency.code }}</td>
+                  <td class="span2">A B C</td>
                 </tr>
-                <tr>
-                  <td>1</td>
-                  <td>10 10 2012</td>
-                  <td>Lunch</td>
-                  <td>10.00 EUR</td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
         </div>
@@ -97,18 +93,6 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-alert.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-scrollspy.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-button.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
-
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
   </body>
 </html>
