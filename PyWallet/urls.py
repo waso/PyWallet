@@ -6,6 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'engine.views.home', name='home'),
+    url(r'^remove/$', 'engine.views.remove', name='remove'),
+    url(r'^update/$', 'engine.views.update', name='update'),
     # Examples:
     # url(r'^$', 'PyWallet.views.home', name='home'),
     # url(r'^PyWallet/', include('PyWallet.foo.urls')),

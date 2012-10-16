@@ -8,7 +8,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
     <style>
@@ -25,10 +24,36 @@
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}ico/favicon.ico">
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+
+    <script>
+
+$(document).on("click", ".open-remove_confirm_modal", function () {
+  var expId = $(this).data('id');
+  var expName = $(this).data('name');
+  var expAmount = $(this).data('amount');
+  $(".modal-body #expense_name").text( 'Name: ' + expName );
+  $(".modal-body #expense_amount").text( 'Amount: ' + expAmount );
+  $(".modal-body #expense_id").val( expId );
+  $('#remove_confirm_modal').modal('show');
+});
+
+$(document).on("click", ".open-edit_modal", function () {
+  var expId = $(this).data('id');
+  var expName = $(this).data('name');
+  var expAmount = $(this).data('amount');
+  var expDate = $(this).data('date');
+  $(".modal-body #expense_name").val( expName );
+  $(".modal-body #expense_amount").val( expAmount );
+  $(".modal-body #expense_date").val( expDate );
+  $(".modal-body #expense_id").val( expId );
+  $('#edit_modal').modal('show');
+});
+
+    </script>
   </head>
-
   <body>
-
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -64,7 +89,7 @@
             <button class="btn" type="submit">Add</button>
           </form>
 
-          <table class="table table-hover">
+          <table id="expenses" class="table table-hover">
               <thead>
                 <tr>
                   <th>#</th>
@@ -76,11 +101,70 @@
               <tbody>
                 {% for expense in expenses.all %}
                 <tr>
+                  <input type="hidden" id="expense_id" value="{{ expense.id }}">
                   <td class="span1">{{ expense.transaction_id }}</td>
                   <td class="span2">{{ expense.date|date:"j-m-o" }}</td>
                   <td class="span6">{{ expense.name }}</td>
                   <td class="span2 currency">{{ expense.amount|format_price }} {{ expense.currency.code }}</td>
-                  <td class="span2">A B C</td>
+                  <td class="span1">
+                    <a class="open-remove_confirm_modal" href="#remove_confirm_modal" data-toggle="modal" data-name="{{ expense.name }}" data-id="{{ expense.id }}" data-amount="{{ expense.amount|format_price }} {{ expense.currency.code }}"><i class="icon-minus-sign"></i></a> 
+                    <a class="open-edit_modal" href="#edit_modal" data-toggle="modal" data-name="{{ expense.name }}" data-id="{{ expense.id }}" data-amount="{{ expense.amount|format_price }}" data-currency="{{ expense.currency.code }}" data-date="{{ expense.date|date:"j-m-o" }}"><i class="icon-edit"></i></a> 
+                    </td>
+                  <div id="remove_confirm_modal" class="modal hide">
+                    <form action="/remove/" method="POST">
+                      {% csrf_token %}
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Remove expense</h3>
+                        
+                      </div>
+                      <div class="modal-body">
+                        <input type="hidden" name="expense_id"  id="expense_id" value="" />
+                        <div id="expense_name" name="expense_name"></div>
+                        <div id="expense_amount" name="expense_amount"></div>
+                        <br>
+                        <p>Delete this expense?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                        <button class="btn btn-primary" type="submit">Yes</button>
+                      </div>
+                    </form>
+                  </div>
+
+
+                  <div id="edit_modal" class="modal hide">
+                    <form action="/update/" method="POST">
+                      {% csrf_token %}
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Edit expense</h3>
+                        
+                      </div>
+                      <div class="modal-body">
+                        <dl class="dl-horizontal">
+                          <dt>Name</dt>
+                          <dd><input type="text" name="expense_name"  id="expense_name" value="" class="width250" /></dd>
+                          <dt>Amount</dt>
+                          <dd><input type="text" name="expense_amount"  id="expense_amount" value="" class="width175" /> 
+                            <select class="width70" id="expense_currency" name="expense_currency">
+                              <option value="eur">EUR</option>
+                              <option value="pln">PLN</option>
+                            </select></dd>
+                          <dt>Date</dt>
+                          <dd><input type="text" name="expense_date"  id="expense_date" value="" class="input-small" /></dd>
+                        </dl>
+                        <input type="hidden" name="expense_id"  id="expense_id" value="" />
+                        
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                      </div>
+                    </form>
+                  </div>
+
                 </tr>
                 {% endfor %}
               </tbody>
@@ -92,7 +176,5 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
   </body>
 </html>
