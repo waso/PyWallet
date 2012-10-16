@@ -77,7 +77,7 @@ $(document).on("click", ".open-edit_modal", function () {
 
       <div class="row-fluid">
         <div class="span8">
-          <form class="form-inline" method="POST" action="/">
+          <form class="form-inline" method="POST" action="/add/">
             {% csrf_token %}
             <input class="span2" name="amount" id="amount" type="text" placeholder="0.00">
             <select class="width70" id="currency" name="currency">

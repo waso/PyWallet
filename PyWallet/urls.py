@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'engine.views.home', name='home'),
+    url(r'^add/$',    'engine.views.add',    name='add'),
     url(r'^remove/$', 'engine.views.remove', name='remove'),
     url(r'^update/$', 'engine.views.update', name='update'),
     # Examples:

@@ -4,7 +4,16 @@ from forms import ExpenseAddForm, ExpenseEditForm
 from models import Expense, Currency
 from datetime import datetime
 
+
 def home(request):
+    expenses = Expense.objects.all().order_by('-date','-transaction_id')
+    date = datetime.now()
+    return render_to_response('base.html', {
+            'expenses' : expenses,
+            'date' : date},
+             context_instance = RequestContext(request))
+
+def add(request):
     if request.method == 'POST':
         form = ExpenseAddForm(request.POST)
         if form.is_valid():
@@ -17,16 +26,7 @@ def home(request):
             exp.currency = cur
             exp.date = datetime.strptime(form.cleaned_data['date'], '%d-%m-%Y')
             exp.save()
-            return redirect ('/')
-        else:
-            return redirect ('/')
-    else:
-        expenses = Expense.objects.all().order_by('-date','-transaction_id')
-        date = datetime.now()
-        return render_to_response('base.html', {
-            'expenses' : expenses,
-            'date' : date},
-             context_instance = RequestContext(request))
+    return redirect ('/')
 
 def remove(request):
     print "remove"
@@ -39,9 +39,7 @@ def remove(request):
             return redirect ('/')
 
         expense.delete()
-        return redirect ('/')
-    else:
-        return redirect ('/')
+    return redirect ('/')
 
 def update(request):
     print "update"
@@ -59,6 +57,4 @@ def update(request):
             expense.save()
         except Expense.DoesNotExist:
             pass
-        return redirect ('/')
-    else:
-        return redirect ('/')
+    return redirect ('/')
