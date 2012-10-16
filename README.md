@@ -1,7 +1,7 @@
 PyWallet
 ========
 
-Small app for managing personal expenses. 
+Small app for tracking personal expenses. 
 
 Technology
 ========
