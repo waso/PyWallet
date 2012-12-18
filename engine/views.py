@@ -7,9 +7,12 @@ from datetime import datetime
 
 def home(request):
     expense_buckets = ExpenseBucket.objects.all().order_by('-date', '-store')
+    for bucket in expense_buckets:
+        expenses[bucket.id] = Expense.objects.filter(bucket = bucket.id)
     date = datetime.now()
     return render_to_response('base.html', {
             'expense_buckets' : expense_buckets,
+            'expenses' : expenses,
             'date' : date},
              context_instance = RequestContext(request))
 
