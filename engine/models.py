@@ -24,6 +24,7 @@ class Expense(models.Model):
     #transaction_id = models.IntegerField()
     #date = models.DateField()
     #name = models.CharField(max_length = 100)
+    bucket = models.ForeignKey(ExpenseBucket)
     expense_type = models.ForeighKey(ExpenseType)
     amount = models.DecimalField(max_digits = 10, decimal_places = 5)
     currency = models.ForeignKey(Currency)
