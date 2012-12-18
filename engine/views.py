@@ -1,15 +1,15 @@
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from forms import ExpenseAddForm, ExpenseEditForm
-from models import Expense, Currency
+from models import Currency, ExpenseBucket
 from datetime import datetime
 
 
 def home(request):
-    expenses = Expense.objects.all().order_by('-date','-transaction_id')
+    expense_buckets = ExpenseBucket.objects.all().order_by('-date', '-store')
     date = datetime.now()
     return render_to_response('base.html', {
-            'expenses' : expenses,
+            'expense_buckets' : expense_buckets,
             'date' : date},
              context_instance = RequestContext(request))
 
