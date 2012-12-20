@@ -23,7 +23,7 @@ class User(models.Model):
 class ExpenseBucket(models.Model):
     date = models.DateField()
     store = models.ForeignKey(Store)
-    form_of_payment = models.ForeignKey(FirmOfPayment)
+    form_of_payment = models.ForeignKey(FormOfPayment)
 
 class Expense(models.Model):
     #transaction_id = models.IntegerField()
