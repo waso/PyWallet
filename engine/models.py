@@ -20,6 +20,11 @@ class User(models.Model):
     def __unicode__(self):
         return self.username
 
+class ExpenseBucket(models.Model):
+    date = models.DateField()
+    store = models.ForeignKey(Store)
+    form_of_payment = models.ForeignKey(FirmOfPayment)
+
 class Expense(models.Model):
     #transaction_id = models.IntegerField()
     #date = models.DateField()
@@ -29,9 +34,4 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits = 10, decimal_places = 5)
     currency = models.ForeignKey(Currency)
     comment = models.CharField(max_length = 100)
-
-class ExpenseBucket(models.Model):
-    date = models.DateField()
-    store = models.ForeignKey(Store)
-    form_of_payment = models.ForeignKey(FirmOfPayment)
     
