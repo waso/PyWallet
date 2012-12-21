@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: 'proxima-nova', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    color: #333;
+    background: #fff;
+}
+
+.currency {
+    font-size: 14px;
+    text-align: left;
+    font-weight: bold;
+    color: #138F03;
+}
+
+.width70 {
+    width: 70px;
+}
+
+.width250 {
+    width: 250px;
+}
+
+.width175 {
+    width: 175px;
+}

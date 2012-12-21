@@ -1,10 +1,40 @@
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from forms import ExpenseAddForm, ExpenseEditForm
 from models import Currency, ExpenseBucket
 from datetime import datetime
 
 
+def sign_in(request):
+    #redirect user to main page if he's already signed in
+    if request.user.is_authenticated():
+        return redirect('/')
+
+    #if signin form sent, authenticate
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return redirect ('/')
+            else:
+                return redirect ('/')
+        else:
+            return redirect ('/')
+    else:
+        return render_to_response('login.html', {},
+             context_instance = RequestContext(request))
+
+@login_required
+def sign_out(request):
+    logout(request)
+    return redirect ('/')
+
+@login_required
 def home(request):
     expense_buckets = ExpenseBucket.objects.all().order_by('-date', '-store')
     for bucket in expense_buckets:
@@ -16,6 +46,7 @@ def home(request):
             'date' : date},
              context_instance = RequestContext(request))
 
+@login_required
 def add(request):
     if request.method == 'POST':
         form = ExpenseAddForm(request.POST)
@@ -31,6 +62,7 @@ def add(request):
             exp.save()
     return redirect ('/')
 
+@login_required
 def remove(request):
     print "remove"
     if request.method == 'POST':
@@ -44,6 +76,7 @@ def remove(request):
         expense.delete()
     return redirect ('/')
 
+@login_required
 def update(request):
     print "update"
     if request.method == 'POST':

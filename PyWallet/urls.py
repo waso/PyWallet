@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     url(r'^add/$',    'engine.views.add',    name='add'),
     url(r'^remove/$', 'engine.views.remove', name='remove'),
     url(r'^update/$', 'engine.views.update', name='update'),
+    url(r'^login/$', 'engine.views.sign_in', name='sign_in'),
+    url(r'^logout/$', 'engine.views.sign_out', name='sign_out'),
     # Examples:
     # url(r'^$', 'PyWallet.views.home', name='home'),
     # url(r'^PyWallet/', include('PyWallet.foo.urls')),
